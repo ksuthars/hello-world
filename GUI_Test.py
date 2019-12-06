@@ -9,7 +9,7 @@ import csv
 #import mytest
 
 class Trip_Button:
-     
+
     def __init__(self, Name='',i=0, device=''):
         ##b = Button(root,text=Name, padx=10, pady=10,command=lambda:self.button_clicked(device,Name))
         b = Button(frame_trip,text=Name, padx=55, pady=10,command=lambda:self.button_clicked(device,Name))
@@ -18,16 +18,20 @@ class Trip_Button:
         b.grid(row=r, column=c)
         TrpName = ''
         
-               
+        #print_btn(Name)
+        #my_var = StringVar()
+        #my_var.set(Name)
+
     def button_clicked(self, device='',Name=''):
-        hide_frame()
+        global Btn_txt
         #frame_trip.state = DISABLED
         #messagebox.showinfo("Trip",device+"\n"+Name)
         #print(Name+"/"+str(datetime.date.today()))
         #txtTrip = []
         #txtAvail = []
         #txtBook = []
-        CurrTrip =Name
+        Btn_txt=Name
+        print (Btn_txt)
         TrpName = Name+"/"+str(datetime.date.today())
         publish_msg(device,TrpName)
         second_win()
@@ -52,11 +56,6 @@ def publish_msg(device, message):
     print("Disconnecting....")
     client.disconnect()
 
-def show_frame():
-    frame_trip.lift()
-    
-def hide_frame():
-    frame_trip.lower()
         
 def on_log(client, userdata, level, buf):
     print("log: "+buf)
@@ -75,6 +74,8 @@ def on_disconnect(client, userdata, flags, rc=0):
 
 def on_message(client, userdata, msg):
     print("On Messaged............")
+    print (msg.topic + " " + str(msg.qos) + " " + msg.payload.decode("utf-8"))
+    toptype=msg.topic.split('/')
     topic = msg.topic
     m_decode = str(msg.payload.decode("utf-8"))
     print("Message received: ", m_decode)
@@ -93,6 +94,7 @@ def second_win():
     window.title("LIFT Passenger Details")
     window.geometry('660x200')
     window.config(bg='powder blue')
+    print(Btn_txt)
     #Triptitle_1=Label(window, text=busRName,justify=CENTER,padx=250, pady=5,font=('arial',15,'bold'),bd=1,bg='powder blue',fg='green')
     Triptitle_1=Label(window, text=busRName,justify=CENTER,padx=20, pady=1,font=('arial',15,'bold'),bd=1,bg='powder blue',fg='green')
     TripVac_1=Label(window, text="Available Seats: 5 ",justify=CENTER,padx=5, pady=1,font=('arial',15,'bold'),bd=1,bg='powder blue',fg='green')    
@@ -124,8 +126,7 @@ def second_win():
     lblBook4.grid(row =4, column = 1)
     lblBook5 = Label(window,text = 'UnReserved')
     lblBook5.grid(row =5, columnspan = 2)'''
-    CurrTrip=10106
-    #Trip_Button.CurrTrip=10106
+
     '''for i in range (0,5):
         bookd = Button(window,text="Reserved", padx=5, pady=5)
         rc = divmod(i,4)
@@ -136,10 +137,10 @@ def second_win():
         txtAvail =trips[i][4]
         txtBook =trips[i][3]
         bookcounter=1
-        if str(trips[i][1]) == str(CurrTrip):
+        if str(trips[i][1]) == str(Btn_txt):
             for j in range (0,int(txtAvail)):
                 if int(bookcounter) <= int(trips[i][3]):
-                    bookd = Button(window,text="RFID"+str(CurrTrip)+str(j), padx=5, pady=5,bd=1,bg='red',fg='powder blue')
+                    bookd = Button(window,text="RFID"+str(Btn_txt)+str(j), padx=5, pady=5,bd=1,bg='red',fg='powder blue')
                     rc = divmod(j,4)
                     r,c = rc[0], rc[1]
                     bookd.grid(row=r+7, column=c)
@@ -157,8 +158,7 @@ def second_win():
     #lblTitle = Label(window,text = 'LIFT Info', font=('arial',50,'bold'),bg='powder blue',fg='black')
     #lblTitle.grid(row =0, column = 0, columnspan=2, pady=40)
 #===============================================================================
-def display_global():
-    CurrTrip=Name
+
 #==================================Input data===================================
 route = []
 today = datetime.datetime.now()
