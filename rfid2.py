@@ -34,6 +34,7 @@ try:
             print(" ")        
          
         print(x)
+#       time.sleep(1)
 
 except KeyboardInterrupt:
         data.close()
